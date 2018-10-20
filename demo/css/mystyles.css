@@ -147,6 +147,7 @@ textarea {
 
 html {
   box-sizing: border-box;
+  height:100%
 }
 
 *, *::before, *::after {
@@ -217,6 +218,7 @@ body {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
+  height:100%
 }
 
 a {
@@ -3253,7 +3255,6 @@ a.has-text-danger:hover, a.has-text-danger:focus {
 .image img {
   display: block;
   height: auto;
-  width: 100%;
 }
 .image img.is-rounded {
   border-radius: 290486px;
@@ -3341,7 +3342,7 @@ a.has-text-danger:hover, a.has-text-danger:focus {
   flex-basis: 0;
   flex-grow: 1;
   flex-shrink: 1;
-  padding: 0.75rem;
+  padding: 0.2rem;
 }
 .columns.is-mobile > .column.is-narrow {
   flex: none;
@@ -5491,6 +5492,7 @@ body.has-spaced-navbar-fixed-bottom {
   box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
   color: #757763;
   max-width: 100%;
+  height:100%;
   position: relative;
 }
 
@@ -6275,7 +6277,7 @@ body.has-spaced-navbar-fixed-bottom {
 }
 
 .section {
-  padding: 3rem 1.5rem;
+  padding: 1.5rem 1.5rem;
 }
 @media screen and (min-width: 1088px) {
   .section.is-medium {
