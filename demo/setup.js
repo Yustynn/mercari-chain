@@ -14,11 +14,11 @@ const CONFIG = {
 const { random, round, floor, max } = Math;
 const choice = (arr) => floor( random() * arr.length );
 
-const nodes = []
+const data = { nodes: [], links: []}
 
 const addNode = () => {
-  nodes.push({
-    id: nodes.length,
+  data.nodes.push({
+    id: data.nodes.length,
     confidence: max(CONFIG.minValue, random()),
     trustworthiness: max(CONFIG.minValue, random()),
     confidence: CONFIG.minValue,
@@ -29,19 +29,20 @@ const addNode = () => {
 const initNodes = () => {
   for (let i = 0; i < CONFIG.N; i++) addNode()
 
+  const { nodes } = data
+
   // adjust main node
   nodes[0].confidence = CONFIG.mainNode.confidence
   nodes[0].trustworthiness = CONFIG.mainNode.trustworthiness
   nodes[0].confidence = 0.8
 }
 
-const links = []
 const addLinks = (node) => {
-  for (let otherNode of nodes) {
+  for (let otherNode of data.nodes) {
     const [id1, id2] = [node, otherNode].map(n => n.id)
     if (id1 === id2) continue;
     if (random() <= CONFIG.p) {
-      links.push({
+      data.links.push({
         source: id1,
         target: id2,
       });
@@ -49,7 +50,7 @@ const addLinks = (node) => {
   }
 }
 
-const initLinks = () => nodes.forEach(addLinks)
+const initLinks = () => data.nodes.forEach(addLinks)
 
 initNodes()
 initLinks()

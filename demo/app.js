@@ -1,5 +1,5 @@
-console.log(links)
-console.log(nodes)
+console.log(data.links)
+console.log(data.nodes)
 
 const svg = d3.select('svg');
 const width = +svg.attr('width');
@@ -9,7 +9,7 @@ const [trustworthinessSpan, confidenceSpan] = ['#trustworthiness', '#confidence'
   .map(id => d3.select(id))
 
 const updateSpans = () => {
-  const { confidence, trustworthiness } = nodes[0]
+  const { confidence, trustworthiness } = data.nodes[0]
 
   trustworthinessSpan.text(round(trustworthiness * 100))
   confidenceSpan.text(round(confidence * 100))
@@ -18,7 +18,7 @@ const updateSpans = () => {
 updateSpans()
 
 const sim = d3.forceSimulation()
-  .nodes(nodes);
+  .nodes(data.nodes);
 
 const getNodeFill = (node) => {
   //if (node.id === 0) return 'white';
@@ -47,7 +47,7 @@ sim
 let node = svg
   .attr('class', 'nodes')
   .selectAll('circle')
-  .data(nodes)
+  .data(data.nodes)
   .enter().append('circle')
       .attr('r', getNodeRadius)
       .attr("fill", getNodeFill)
@@ -56,7 +56,7 @@ let node = svg
 
 let label = svg
   .selectAll('text')
-  .data(nodes)
+  .data(data.nodes)
   .enter().append('text')
     .attr('dx', 20)
     .attr('dy', '0.35em')
@@ -66,7 +66,7 @@ let link = svg
   .append('g')
   .attr('class', 'links')
   .selectAll('line')
-  .data(links)
+  .data(data.links)
   .enter().append('line')
     .attr('stroke-width', 1)
     .attr('stroke', '#666');
@@ -89,7 +89,7 @@ function handleTick() {
 }
 
 const linkForce = d3
-  .forceLink(links)
+  .forceLink(data.links)
   .distance(200)
   .strength(0.1)
   .id(d => d.id)
@@ -98,12 +98,12 @@ sim.force('links', linkForce)
 
 const addNodeToViz = () => {
   addNode()
-  addLinks(nodes[nodes.length-1])
+  addLinks(data.nodes[data.nodes.length-1])
 
-  sim.nodes(nodes)
+  sim.nodes(data.nodes)
 
     // Apply the general update pattern to the nodes.
-  node = node.data(nodes, function(d) { return d.id;});
+  node = node.data(data.nodes, function(d) { return d.id;});
   node.exit().remove();
   node = node
     .enter().append("circle")
@@ -114,7 +114,7 @@ const addNodeToViz = () => {
       .merge(node);
 
   // update labels
-  label = label.data(nodes, d => d.id)
+  label = label.data(data.nodes, d => d.id)
 
   label.exit().remove();
   label = label
@@ -126,15 +126,15 @@ const addNodeToViz = () => {
 
 
   // Apply the general update pattern to the links.
-  link = link.data(links, function(d) { return d.source.id + "-" + d.target.id; });
+  link = link.data(data.links, function(d) { return d.source.id + "-" + d.target.id; });
   link.exit().remove();
   link = link.enter()
     .append("line")
     .attr('stroke', '#666')
     .merge(link);
   // Update and restart the simulation.
-  sim.nodes(nodes);
-  sim.force("links").links(links);
+  sim.nodes(data.nodes);
+  sim.force("links").links(data.links);
   sim.alpha(1).restart();
 
 }
