@@ -39,8 +39,9 @@ def add_review(user_id):
     add = conn.cursor()
     add.execute('''INSERT INTO REVIEWS(UserId,Company,Rating,Content) VALUES(?,?,?,?)''',
                 (user_id, company, rating, content))
-
+    conn.commit()
     graph.update()
+    return ''
 
 
 # GET methods
