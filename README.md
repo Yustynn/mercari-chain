@@ -1,11 +1,12 @@
 # mercari-chain
 
+# Running graph computation server
+In `/projectx`, set `FLASK_APP=server.py` and run the server with `flask run`.
+
 ## Technology Stack
-- Node.js
-- React
-- GraphQL
-- MongoDB
-- Ethereum
+- Flask
+- Networkx
+- SQLite
 
 ## General Idea
 We're tackling the problem of trust for all sharing economy endeavours (relevant themes are Security & Privacy, and Fairness). You generally know if a user is a good or bad actor when they transact a lot on your platform. The problem is telling how a user will behave when they're new, or infrequently use your service. By solving this, we eliminate cases of fraud and have users trust us more.
