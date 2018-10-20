@@ -4,7 +4,10 @@
     <title>Project X</title>
     <link rel="stylesheet" href="css/mystyles.css">
     <link rel="stylesheet" type="text/css" href="css/starability-basic.min.css"/>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js"></script>
+    <script src="https://d3js.org/d3-color.v1.min.js"></script>
+    <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
   </head>
   <body>
     <!-- top row -->
@@ -39,11 +42,11 @@
 	  <!-- score -->
 	  <div class="column card has-background-white-bis has-text-centered">
 	    <div class="card-content">
-	      <p class="is-size-1">53%</p>
+        <p class="is-size-1"><span id='trustworthiness'></span>%</p>
 	      <p class="heading is-uppercase has-text-weight-bold">Trustworthiness</p>
 	    </div>
 	    <footer class="card-footer">
-	      <p class="card-footer-item heading is-uppercase has-text-weight-light has-text-centered">with 78% confidence</p>
+        <p class="card-footer-item heading is-uppercase has-text-weight-light has-text-centered"> <span id='confidence'></span>% confidence</p>
 	    </footer>
 	  </div>
 	</div>
@@ -53,13 +56,13 @@
 
     <!-- bottom row (sidebar and graph) -->
     <section class="section">
-      <div class="container">
+      <div class="">
 	<div class="columns">
 	  <div class="column is-one-third">
 	    <div class="card">
 	      <div class="card-content box has-text-centered">
 		<!-- add person -->
-		<button class="button is-primary is-size-5">Add person</button>
+		<button class="button is-primary is-size-5" id="add-person">Add person</button>
 	      </div>
 	      <div class="card-content box has-text-centered" style="border-top: 1px solid #dbdbdb;">
 		
@@ -92,11 +95,13 @@
 	      </div>
 	    </div>
 	  </div>
-	</div>
-	<div class="column">
+	<div class="column is-two-thirds">
 	  <!-- graph visualization here yustynn -->
+    <svg width="1000" height="450">
+      <!--<g class="links"></g>-->
+      <!--<g class="nodes"></g>-->
+    </svg>
 	</div>
-      </div>
 </div>
 </section>
 
@@ -110,5 +115,7 @@
   }
 </script>
 
+<script src="./setup.js"></script>
+<script src="./app.js"></script>
 </body>
 </html>
