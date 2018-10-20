@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16">
+    <g fill="none" data-name="icCloseLight">
+        <mask id="ic-b" width="16" height="16" x="0" y="0" maskUnits="userSpaceOnUse">
+            <use fill="#fff" data-name="Clip 2" transform="scale(.9838)" xlink:href="#ic-a"/>
+        </mask>
+        <g mask="url(#ic-b)">
+            <use fill="#fff" data-name="Fill 1" transform="translate(-10.783 -10.783) scale(.9838)" xlink:href="#ic-c"/>
+        </g>
+    </g>
+    <defs>
+        <path id="ic-a" fill-rule="evenodd" d="M7.425 8.132L0 .707.707 0l7.425 7.425L15.556 0l.708.707-7.425 7.425 7.425 7.424-.708.708-7.424-7.425-7.425 7.425L0 15.556l7.425-7.424z" clip-rule="evenodd"/>
+        <path id="ic-c" fill-rule="evenodd" d="M0 19.092L19.092 0l19.092 19.092-19.092 19.092L0 19.092z" clip-rule="evenodd"/>
+    </defs>
+</svg>
