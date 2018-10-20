@@ -14,5 +14,5 @@ class ReputationGraph():
 
     def get_score_confidence(self, userid):
         '''Get the value of a given node'''
-        # return (score, confidence)
-        pass
+        score, confidence = 0, 0
+        return (score, confidence)
