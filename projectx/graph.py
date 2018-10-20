@@ -7,9 +7,9 @@ import sqlite3
 MAX_DEPTH = 4
 
 class ReputationGraph():
-    def __init__(self, graph=nx.Graph()):
+    def __init__(self, conn, graph=nx.Graph()):
+        self.conn = conn
         self.graph = graph
-        self.conn = sqlite3.connect('projectxdb.db')
 
     @staticmethod
     def random(N=50, p=0.1):
@@ -41,8 +41,9 @@ class ReputationGraph():
                         populate_trackers(node, degree + 1 if degree else 1)
 
         populate_trackers(node)
-
-        scores_from_neighbors = (np.mean(scores_tracker), np.mean(confidences_tracker))
+        scores_from_neighbors = (0, 0)
+        if scores_tracker and confidences_tracker:
+            scores_from_neighbors = (np.mean(scores_tracker), np.mean(confidences_tracker))
         own_scores = (core_scores[node], confidence_scores[node])
 
         def aggregate(own_score, neighbor_score):
@@ -58,7 +59,7 @@ class ReputationGraph():
             core_score = scores[i]
             core_confidence = confidences[i]
             if user_id not in self.graph.nodes:
-                self.graph.add_node(user_id, score=core_score, confidence=core_confidence)
+                self.graph.add_node(user_id, core_score=core_score, core_confidence=core_confidence)
             else:
                 nx.set_node_attributes(self.graph,
                                        {user_id: {'core_score': core_score,
@@ -79,19 +80,23 @@ class ReputationGraph():
         '''Return two lists of user id's and scores'''
         users, scores, confidences = [], [], []
         for user_id in self.conn.execute('SELECT UserId FROM USERS'):
-            users.append(user_id)
+            users.append(*user_id)
             reviews = self.read_reviews(user_id)
-            scores.append(np.mean(reviews))
+            score = 0
+            if reviews:
+                score = np.mean(reviews)
+            scores.append(score)
             confidences.append(1-np.exp(len(list(reviews))))
         return users, scores, confidences
 
     def read_reviews(self, user_id):
-        review_scores = self.conn.execute("SELECT Rating FROM REVIEWS WHERE score=?",
+        cur = self.conn.execute("SELECT Rating FROM REVIEWS WHERE UserId=?",
                                          user_id)
+        review_scores = [x[0] for x in cur.fetchall()]
         return review_scores
 
     def read_friendships(self):
-        friendships = self.conn.execute("SELECT * FROM FRIENDSHIPS")
+        friendships = self.conn.execute("SELECT * FROM FRIENDS")
         return friendships
 
     def get_nodes(self):
