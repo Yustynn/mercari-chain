@@ -4,30 +4,32 @@ from graph import ReputationGraph
 from core_score import update_core_score_with_review
 import sqlite3
 import json
+import random
 
 app = Flask(__name__)
-graph = ReputationGraph()
-conn = sqlite3.connect('projectxdb.db')
+conn = sqlite3.connect('projectxdb.db', check_same_thread=False)
+graph = ReputationGraph(conn)
 
 
 # POST methods
 @app.route('/add_new_user/<int:user_id>', methods=['POST'])
 def add_new_user(user_id):
     '''Add a new user to db and call graph.update'''
-    print(user_id)
     name = request.form['name']
-    friends = request.form['friends']
     add = conn.cursor()
     add.execute('''INSERT INTO USERS(UserId,Name) VALUES(?,?)''',
                 (user_id, name))
-    for friend in friends:
-        add.execute('''INSERT INTO FRIENDS(UserId1,UserId2) VALUES(?,?)''',
-                    (user_id, friend))
-
+    users = []
+    for friend_id in conn.execute('SELECT UserId FROM USERS'):
+        if random.random() < 0.3:
+            add.execute('''INSERT INTO FRIENDS(UserId1,UserId2) VALUES(?,?)''',
+                        (user_id, *friend_id))
+    conn.commit()
     graph.update()
+    return ''
 
 
-@app.route('/add_review/<int:user_id>')
+@app.route('/add_review/<int:user_id>', methods=['POST'])
 def add_review(user_id):
     '''Add a new review to db and call graph.update'''
     rating = request.form['rating']

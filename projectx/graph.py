@@ -7,9 +7,9 @@ import sqlite3
 MAX_DEPTH = 4
 
 class ReputationGraph():
-    def __init__(self, graph=nx.Graph()):
+    def __init__(self, conn, graph=nx.Graph()):
+        self.conn = conn
         self.graph = graph
-        self.conn = sqlite3.connect('projectxdb.db')
 
     @staticmethod
     def random(N=50, p=0.1):
