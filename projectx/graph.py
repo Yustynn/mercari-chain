@@ -49,6 +49,7 @@ class ReputationGraph():
             return 0.5 * own_score + 0.5 * neighbor_score
 
         return tuple(aggregate(*components) for components in zip(scores_from_neighbors, own_scores))
+<<<<<<< HEAD
 
     def update(self):
         '''Recomputes graph weights'''
@@ -115,4 +116,6 @@ class ReputationGraph():
             edgedict['uid1'] = edge[0]
             edgedict['uid2'] = edge[1]
             edgelist.append(edgedict)
+        return edgelist
+=======
 >>>>>>> 4c84c883131c09f2c49336dd6383419c7718a0a8
