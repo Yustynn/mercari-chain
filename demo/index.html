@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Project X</title>
+    <link rel="stylesheet" href="css/mystyles.css">
+    <link rel="stylesheet" type="text/css" href="css/starability-basic.min.css"/>
+
+  </head>
+  <body>
+    <!-- top row -->
+    <section class="section has-background-white-ter">
+      <div class="container">
+	<div class="columns">
+	  <!-- profile card -->
+	  <div class="column is-two-thirds">
+	    <div class="columns">
+	      <!-- photo -->
+	      <div class="column is-one-third">
+		<figure class="image is-256x256">
+		  <img class="is-rounded" src="https://scontent-waw1-1.xx.fbcdn.net/v/t1.0-1/p200x200/23376094_10155800694609857_726382847167932927_n.jpg?_nc_cat=106&_nc_ht=scontent-waw1-1.xx&oh=d587e46a14b1d68c980d5aa3248b0f2a&oe=5C5C6F9B">
+		</figure>
+	      </div>
+	      <!-- name -->
+	      <div class="column section">
+		<h1 class="title is-2 has-text-weight-bold">Bella Schmitz</h1>
+		<div class="columns">
+		  <div class="column">
+		    <p class="is-uppercase has-text-weight-semibold has-text-right">No. of reviews:</p>
+		    <p class="is-uppercase has-text-weight-semibold has-text-right">Average rating:</p>
+		  </div>
+		  <div class="column">
+		    <p class="has-text-left">12</p>
+		    <p class="has-text-left">3.53/5</p>
+		  </div>
+		</div>
+	      </div>
+	    </div>
+	  </div>
+	  <!-- score -->
+	  <div class="column card has-background-white-bis has-text-centered">
+	    <div class="card-content">
+	      <p class="is-size-1">53%</p>
+	      <p class="heading is-uppercase has-text-weight-bold">Trustworthiness</p>
+	    </div>
+	    <footer class="card-footer">
+	      <p class="card-footer-item heading is-uppercase has-text-weight-light has-text-centered">with 78% confidence</p>
+	    </footer>
+	  </div>
+	</div>
+      </div>
+    </section>
+
+
+    <!-- bottom row (sidebar and graph) -->
+    <section class="section">
+      <div class="container">
+	<div class="columns">
+	  <div class="column is-one-third">
+	    <div class="card">
+	      <div class="card-content box has-text-centered">
+		<!-- add person -->
+		<button class="button is-primary is-size-5">Add person</button>
+	      </div>
+	      <div class="card-content box has-text-centered" style="border-top: 1px solid #dbdbdb;">
+		
+		<!-- review -->
+		<div class="slidecontainer">
+		  <input type="range" min="1" max="100" value="50" class="slider" id="numReviewsRange" style="width: 100%;" >
+		  <p>No. of reviews: <span id="demo"></span></p>
+		</div>
+		<div class="control" style="margin: 3px 0 8px 0;">
+		  <textarea class="textarea is-hovered" placeholder="Write your review"></textarea>
+		</div>
+
+		<div style="display: flex; justify-content: center;">
+		  <!-- stars -->
+		  <fieldset class="starability-basic is-centered">
+		    <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="0" checked aria-label="No rating" />
+		    <input type="radio" id="first-rate1" name="rating" value="1" />
+		    <label for="first-rate1" title="Terrible">1 star</label>
+		    <input type="radio" id="first-rate2" name="rating" value="2" />
+		    <label for="first-rate2" title="Not good">2 stars</label>
+		    <input type="radio" id="first-rate3" name="rating" value="3" />
+		    <label for="first-rate3" title="Average">3 stars</label>
+		    <input type="radio" id="first-rate4" name="rating" value="4" />
+		    <label for="first-rate4" title="Very good">4 stars</label>
+		    <input type="radio" id="first-rate5" name="rating" value="5" />
+		    <label for="first-rate5" title="Amazing">5 stars</label>
+		  </fieldset>
+	      </div>
+	      <button class="button is-primary is-size-5">Add review</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<div class="column">
+	  <!-- graph visualization here yustynn -->
+	</div>
+      </div>
+</div>
+</section>
+
+<script>
+  var slider = document.getElementById("numReviewsRange");
+  var output = document.getElementById("demo");
+  output.innerHTML = slider.value;
+
+  slider.oninput = function() {
+    output.innerHTML = this.value;
+  }
+</script>
+
+</body>
+</html>
