@@ -4,6 +4,7 @@ import networkx as nx
 import numpy as np
 import sqlite3
 
+MAX_DEPTH = 4
 
 class ReputationGraph():
     def __init__(self, graph=nx.Graph()):
@@ -114,4 +115,4 @@ class ReputationGraph():
             edgedict['uid1'] = edge[0]
             edgedict['uid2'] = edge[1]
             edgelist.append(edgedict)
-        return edgelist
+>>>>>>> 4c84c883131c09f2c49336dd6383419c7718a0a8
