@@ -4,6 +4,7 @@ import networkx as nx
 import numpy as np
 import sqlite3
 
+MAX_DEPTH = 4
 
 class ReputationGraph():
     def __init__(self, graph=nx.Graph()):
@@ -48,22 +49,3 @@ class ReputationGraph():
             return 0.5 * own_score + 0.5 * neighbor_score
 
         return tuple(aggregate(*components) for components in zip(scores_from_neighbors, own_scores))
-
-    def update(self):
-        '''Recomputes graph weights'''
-        users, scores = self.read_users()
-        self.graph.add_nodes(users)
-        # Assign scores to each node
-        nx.set_node_attributes(self.graph, scores, 'core_score')
-        # read all friendships and reviews in from db
-        # compute with score algorithm
-        pass
-
-    def read_users(self):
-        '''Return two lists of user id's and scores'''
-        users, scores = [], []
-        for row in self.conn.execute('SELECT user_id, score FROM users'):
-            user, score = row
-            users.append(user)
-            scores.append(score)
-        return users, scores
