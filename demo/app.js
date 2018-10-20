@@ -35,6 +35,11 @@ const getNodeRadius = (node) => max(
   CONFIG.minRadius
 )
 
+const getNodeLabel = ({id}) => {
+  if (id === 0) return "Wim Schmitz"
+  return id
+}
+
 sim
   .force("charge_force", d3.forceManyBody())
   .force("center_force", d3.forceCenter(width/2, height/2))
@@ -48,7 +53,14 @@ let node = svg
       .attr("fill", getNodeFill)
       .attr("stroke", 'black')
       .attr('stroke-width', getNodeStrokeWidth)
-      .text(d => d.id)
+
+let label = svg
+  .selectAll('text')
+  .data(nodes)
+  .enter().append('text')
+    .attr('dx', 20)
+    .attr('dy', '0.35em')
+    .text(getNodeLabel)
 
 let link = svg
   .append('g')
@@ -64,6 +76,10 @@ sim.on('tick', handleTick);
 function handleTick() {
   node.attr('cx', d => d.x)
   node.attr('cy', d => d.y)
+
+  label
+    .attr('x', d => d.x)
+    .attr('y', d => d.y)
 
   link
     .attr('x1', d => d.source.x)
@@ -86,18 +102,28 @@ const addNodeToViz = () => {
 
   sim.nodes(nodes)
 
-
     // Apply the general update pattern to the nodes.
   node = node.data(nodes, function(d) { return d.id;});
   node.exit().remove();
   node = node
-    .enter()
-    .append("circle")
-    .attr("fill", getNodeFill)
-    .attr("stroke", 'black')
-    .attr('stroke-width', getNodeStrokeWidth)
-    .attr('r', getNodeRadius)
-    .merge(node);
+    .enter().append("circle")
+      .attr("fill", getNodeFill)
+      .attr("stroke", 'black')
+      .attr('stroke-width', getNodeStrokeWidth)
+      .attr('r', getNodeRadius)
+      .merge(node);
+
+  // update labels
+  label = label.data(nodes, d => d.id)
+
+  label.exit().remove();
+  label = label
+    .enter().append('text')
+      .attr('dx', 20)
+      .attr('dy', '0.35em')
+      .text(getNodeLabel)
+      .merge(label)
+
 
   // Apply the general update pattern to the links.
   link = link.data(links, function(d) { return d.source.id + "-" + d.target.id; });
