@@ -3,6 +3,7 @@ from flask import Flask, request
 from graph import ReputationGraph
 from core_score import update_core_score_with_review
 import sqlite3
+import json
 
 app = Flask(__name__)
 graph = ReputationGraph()
@@ -30,4 +31,4 @@ def add_review(user_id):
 @app.route('/get/<int:fb_user_id>')
 def get_score_confidence(fb_user_id):
     score, confidence = graph.get_score_confidence(fb_user_id)
-    return score, confidence
+    return json.dumps({"score": score, "confidence": confidence})
