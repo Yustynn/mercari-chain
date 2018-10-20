@@ -1,28 +1,34 @@
 '''Trust compuation server'''
-from flask import Flask
+from flask import Flask, request
 from graph import ReputationGraph
+from core_score import update_core_score_with_review
 import sqlite3
+import json
 
 app = Flask(__name__)
 graph = ReputationGraph()
+conn = sqlite3.connect('db.db')
 
 # POST methods
-@app.route('/add_review/{user_id}')
-def add_review():
-    '''Add_review'''
-    # Update graph
-
-@app.route('/add_new_user')
-def add_new_user(user_id, friends):
+@app.route('/add_new_user/<int:user_id>')
+def add_new_user(user_id):
     '''Add a new user to db and call graph.update'''
+    friends = request.form['friends']
     pass
 
-def add_review(self, userid, rating):
+@app.route('/add_review/<int:user_id>')
+def add_review(user_id):
     '''Add a new review to db and call graph.update'''
-    #... this.update()
+    rating = request.form['rating']
+    content = request.form['content']
+    # Write to db
+    # Update core score with review
+    update_core_score_with_review(conn)
+    #... graph.update()
     pass
 
 # GET methods
-@app.route('')
-def get_score_confidence(fb_user_id, platform):
-    pass
+@app.route('/get/<int:fb_user_id>')
+def get_score_confidence(fb_user_id):
+    score, confidence = graph.get_score_confidence(fb_user_id)
+    return json.dumps({"score": score, "confidence": confidence})
