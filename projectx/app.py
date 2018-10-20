@@ -15,7 +15,11 @@ graph = ReputationGraph(conn)
 @app.route('/add_new_user/<int:user_id>', methods=['POST'])
 def add_new_user(user_id):
     '''Add a new user to db and call graph.update'''
+    print("test")
+    print(user_id)
+    print(request.form)
     name = request.form['name']
+    print(name)
     add = conn.cursor()
     add.execute('''INSERT INTO USERS(UserId,Name) VALUES(?,?)''',
                 (user_id, name))
@@ -24,6 +28,25 @@ def add_new_user(user_id):
         if random.random() < 0.3:
             add.execute('''INSERT INTO FRIENDS(UserId1,UserId2) VALUES(?,?)''',
                         (user_id, *friend_id))
+    conn.commit()
+    graph.update()
+    resp = {"nodes": _get_nodelist(), "links": _get_edgelist()}
+    return json.dumps(resp)
+
+# POST methods
+@app.route('/user', methods=['POST'])
+def add_user():
+    '''Add a new user to db and call graph.update'''
+    user_num = len(graph.get_nodes())
+    name = random.choice(["bob","alice","ken","donald","joe","yustynn","wim","bella"])
+    add = conn.cursor()
+    add.execute('''INSERT INTO USERS(UserId,Name) VALUES(?,?)''',
+                (user_num, name))
+    users = []
+    for friend_id in conn.execute('SELECT UserId FROM USERS'):
+        if random.random() < 0.3:
+            add.execute('''INSERT INTO FRIENDS(UserId1,UserId2) VALUES(?,?)''',
+                        (user_num, *friend_id))
     conn.commit()
     graph.update()
     resp = {"nodes": _get_nodelist(), "links": _get_edgelist()}
@@ -62,6 +85,7 @@ def get_nodelist():
 
 @app.route('/get/edgelist')
 def get_edgelist():
+    print("test")
     edgelist = graph.get_edges()
     return json.dumps(_get_edgelist())
 
