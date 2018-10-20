@@ -86,7 +86,7 @@ class ReputationGraph():
             if reviews:
                 score = np.mean(reviews)
             scores.append(score)
-            confidences.append(1-np.exp(len(list(reviews))))
+            confidences.append(1-np.exp(-len(list(reviews))/60))
         return users, scores, confidences
 
     def read_reviews(self, user_id):
@@ -104,9 +104,9 @@ class ReputationGraph():
         nodes = self.graph.nodes(data=True)
         for node in nodes:
             nodedict = {}
-            nodedict['uid'] = node[0]
-            nodedict['core_score'] = node[1]['core_score']
-            nodedict['core_confidence'] = node[1]['core_confidence']
+            nodedict['id'] = node[0]
+            nodedict['trustworthiness'] = node[1]['core_score']
+            nodedict['confidence'] = node[1]['core_confidence']
             nodedict['computed_score'] = node[1]['computed_score']
             nodedict['computed_confidence'] = node[1]['computed_confidence']
             nodelist.append(nodedict)
@@ -117,7 +117,7 @@ class ReputationGraph():
         edges = self.graph.edges()
         for edge in edges:
             edgedict = {}
-            edgedict['uid1'] = edge[0]
-            edgedict['uid2'] = edge[1]
+            edgedict['target'] = edge[0]
+            edgedict['source'] = edge[1]
             edgelist.append(edgedict)
         return edgelist

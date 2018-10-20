@@ -1,7 +1,7 @@
 # mercari-chain
 
 # Running graph computation server
-In `/projectx`, set `FLASK_APP=server.py` and run the server with `flask run`.
+In `/projectx`, run the server (`app.py`) with `flask run`.
 
 ## Technology Stack
 - Flask

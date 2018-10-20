@@ -26,22 +26,26 @@ def add_new_user(user_id):
                         (user_id, *friend_id))
     conn.commit()
     graph.update()
-    return ''
+    resp = {"nodes": _get_nodelist(), "links": _get_edgelist()}
+    return json.dumps(resp)
 
 
 @app.route('/add_review/<int:user_id>', methods=['POST'])
 def add_review(user_id):
     '''Add a new review to db and call graph.update'''
+    count = request.form['count']
     rating = request.form['rating']
     content = request.form['content']
     company = request.form['company']
 
     add = conn.cursor()
-    add.execute('''INSERT INTO REVIEWS(UserId,Company,Rating,Content) VALUES(?,?,?,?)''',
-                (user_id, company, rating, content))
+    for i in range(int(count)):
+        add.execute('''INSERT INTO REVIEWS(UserId,Company,Rating,Content) VALUES(?,?,?,?)''',
+                    (user_id, company, rating, content))
     conn.commit()
     graph.update()
-    return ''
+    resp = {"nodes": _get_nodelist(), "links": _get_edgelist()}
+    return json.dumps(resp)
 
 
 # GET methods
@@ -53,11 +57,18 @@ def get_score_confidence(fb_user_id):
 
 @app.route('/get/nodelist')
 def get_nodelist():
-    nodelist = graph.get_nodes()
-    return json.dumps(nodelist)
+    return json.dumps(_get_nodelist())
 
 
 @app.route('/get/edgelist')
 def get_edgelist():
     edgelist = graph.get_edges()
-    return json.dumps(edgelist)
+    return json.dumps(_get_edgelist())
+
+def _get_nodelist():
+    nodelist = graph.get_nodes()
+    return nodelist
+
+def _get_edgelist():
+    edgelist = graph.get_edges()
+    return edgelist
