@@ -37,7 +37,7 @@ def add_new_user(user_id):
 @app.route('/user', methods=['POST'])
 def add_user():
     '''Add a new user to db and call graph.update'''
-    user_num = len(graph.get_nodes())
+    user_num = len(conn.execute("SELECT UserId from USERS").fetchall())
     name = random.choice(["bob","alice","ken","donald","joe","yustynn","wim","bella"])
     add = conn.cursor()
     add.execute('''INSERT INTO USERS(UserId,Name) VALUES(?,?)''',
@@ -85,7 +85,6 @@ def get_nodelist():
 
 @app.route('/get/edgelist')
 def get_edgelist():
-    print("test")
     edgelist = graph.get_edges()
     return json.dumps(_get_edgelist())
 
