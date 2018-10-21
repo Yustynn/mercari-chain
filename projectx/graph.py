@@ -52,7 +52,7 @@ class ReputationGraph():
         def aggregate_score(own_score, neighbor_score, neighbor_factor):
             review_num = len(self.read_reviews((node,)))
             own_score
-            return (1-np.exp(-review_num/10)) * own_score + (np.exp(-review_num/10)) * neighbor_score * neighbor_factor
+            return (1-np.exp(-review_num/10)) * own_score + (np.exp(-review_num/10)) * neighbor_score
 
         def aggregate_confidence(own_confidence, neighbor_confidence):
             review_num = len(self.read_reviews((node,)))
@@ -60,7 +60,8 @@ class ReputationGraph():
             
         #print(own_scores)
         #print(scores_from_neighbors)
-        vec = [score*confidence for score,confidence in zip(scores_tracker,confidences_tracker)]
+        vec = [score*confidence for score,confidence in zip(scores_tracker,confidences_tracker) if score != 0]
+        #print(vec)
         neighbor_factor = np.mean(vec) if len(vec)!=0 else 0
         #print("awesome math function",neighbor_factor)
         comp_score = aggregate_score(own_scores[0],scores_from_neighbors[0],neighbor_factor)
