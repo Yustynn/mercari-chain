@@ -72,20 +72,13 @@ def add_review(user_id):
 
 
 # GET methods
-@app.route('/get/<int:fb_user_id>')
-def get_score_confidence(fb_user_id):
-    score, confidence = graph.get_score_confidence(fb_user_id)
-    return json.dumps({"score": score, "confidence": confidence})
-
-
 @app.route('/get/nodelist')
 def get_nodelist():
+    graph.update()
     return json.dumps(_get_nodelist())
-
 
 @app.route('/get/edgelist')
 def get_edgelist():
-    edgelist = graph.get_edges()
     return json.dumps(_get_edgelist())
 
 def _get_nodelist():

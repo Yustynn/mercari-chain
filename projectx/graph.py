@@ -5,6 +5,7 @@ import numpy as np
 import sqlite3
 
 MAX_DEPTH = 4
+CONFIDENCE_FACTOR = 10
 
 class ReputationGraph():
     def __init__(self, conn, graph=nx.Graph()):
@@ -52,11 +53,11 @@ class ReputationGraph():
         def aggregate_score(own_score, neighbor_score, neighbor_factor):
             review_num = len(self.read_reviews((node,)))
             own_score
-            return (1-np.exp(-review_num/10)) * own_score + (np.exp(-review_num/10)) * neighbor_score
+            return (1-np.exp(-review_num/CONFIDENCE_FACTOR)) * own_score + (np.exp(-review_num/CONFIDENCE_FACTOR)) * neighbor_score
 
         def aggregate_confidence(own_confidence, neighbor_confidence):
             review_num = len(self.read_reviews((node,)))
-            return own_confidence + (1-own_confidence)*(np.exp(-review_num/10))*neighbor_confidence
+            return own_confidence + (1-own_confidence)*(np.exp(-review_num/CONFIDENCE_FACTOR))*neighbor_confidence
             
         #print(own_scores)
         #print(scores_from_neighbors)
@@ -104,7 +105,7 @@ class ReputationGraph():
             if reviews:
                 score = np.mean(reviews)
             scores.append(score)
-            confidences.append(1-np.exp(-len(list(reviews))/60))
+            confidences.append(1-np.exp(-len(list(reviews))/CONFIDENCE_FACTOR))
         return users, scores, confidences
 
     def read_reviews(self, user_id):
