@@ -5,6 +5,7 @@ import numpy as np
 import sqlite3
 
 MAX_DEPTH = 4
+CONFIDENCE_FACTOR = 10
 
 class ReputationGraph():
     def __init__(self, conn, graph=nx.Graph()):
@@ -36,20 +37,37 @@ class ReputationGraph():
                 scores_tracker.append(core_scores[node]**degree)
                 confidences_tracker.append(confidence_scores[node]**degree)
 
-                if degree is not MAX_DEPTH:
-                    for node in self.graph.neighbors(node):
-                        populate_trackers(node, degree + 1 if degree else 1)
+            if degree is not MAX_DEPTH:
+                for node in self.graph.neighbors(node):
+                    
+                    populate_trackers(node, degree + 1 if degree else 1)
 
         populate_trackers(node)
         scores_from_neighbors = (0, 0)
+ 
         if scores_tracker and confidences_tracker:
             scores_from_neighbors = (np.mean(scores_tracker), np.mean(confidences_tracker))
         own_scores = (core_scores[node], confidence_scores[node])
 
-        def aggregate(own_score, neighbor_score):
-            return 0.5 * own_score + 0.5 * neighbor_score
+        
+        def aggregate_score(own_score, neighbor_score, neighbor_factor):
+            review_num = len(self.read_reviews((node,)))
+            own_score
+            return (1-np.exp(-review_num/CONFIDENCE_FACTOR)) * own_score + (np.exp(-review_num/CONFIDENCE_FACTOR)) * neighbor_score
 
-        return tuple(aggregate(*components) for components in zip(scores_from_neighbors, own_scores))
+        def aggregate_confidence(own_confidence, neighbor_confidence):
+            review_num = len(self.read_reviews((node,)))
+            return own_confidence + (1-own_confidence)*(np.exp(-review_num/CONFIDENCE_FACTOR))*neighbor_confidence
+            
+        #print(own_scores)
+        #print(scores_from_neighbors)
+        vec = [score*confidence for score,confidence in zip(scores_tracker,confidences_tracker) if score != 0]
+        #print(vec)
+        neighbor_factor = np.mean(vec) if len(vec)!=0 else 0
+        #print("awesome math function",neighbor_factor)
+        comp_score = aggregate_score(own_scores[0],scores_from_neighbors[0],neighbor_factor)
+        comp_conf = aggregate_confidence(own_scores[1],scores_from_neighbors[1])
+        return (comp_score,comp_conf)
 
     def update(self):
         '''Recomputes graph weights'''
@@ -71,6 +89,7 @@ class ReputationGraph():
                 self.graph.add_edge(edge[0], edge[1])
 
         for node in self.graph.nodes:
+            #print("computing scores for node ", node)
             computed_score, computed_confidence = self.compute_scores(node)
             nx.set_node_attributes(self.graph,
                                    {node: {'computed_score': computed_score,
@@ -86,7 +105,7 @@ class ReputationGraph():
             if reviews:
                 score = np.mean(reviews)
             scores.append(score)
-            confidences.append(1-np.exp(-len(list(reviews))/60))
+            confidences.append(1-np.exp(-len(list(reviews))/CONFIDENCE_FACTOR))
         return users, scores, confidences
 
     def read_reviews(self, user_id):
