@@ -5,8 +5,10 @@ from core_score import update_core_score_with_review
 import sqlite3
 import json
 import random
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 conn = sqlite3.connect('projectxdb.db', check_same_thread=False)
 graph = ReputationGraph(conn)
 

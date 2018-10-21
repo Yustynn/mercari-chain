@@ -9,7 +9,7 @@ const CONFIG = {
     trustworthiness: 0.12,
     strokeWidth: 5,
   },
-  url: 'http://b4dbbdbb.ngrok.io'
+  url: 'http://a17878f3.ngrok.io'
 }
 
 const { random, round, floor, max } = Math;
@@ -27,16 +27,16 @@ const addNode = () => {
   })
 }
 
-const initNodes = () => {
-  for (let i = 0; i < CONFIG.N; i++) addNode()
+//const initNodes = () => {
+  //for (let i = 0; i < CONFIG.N; i++) addNode()
 
-  const { nodes } = data
+  //const { nodes } = data
 
-  // adjust main node
-  nodes[0].confidence = CONFIG.mainNode.confidence
-  nodes[0].trustworthiness = CONFIG.mainNode.trustworthiness
-  nodes[0].confidence = 0.8
-}
+  //// adjust main node
+  //nodes[0].confidence = CONFIG.mainNode.confidence
+  //nodes[0].trustworthiness = CONFIG.mainNode.trustworthiness
+  //nodes[0].confidence = 0.8
+//}
 
 //const addLinks = (node) => {
   //for (let otherNode of data.nodes) {
@@ -56,6 +56,14 @@ const initNodes = () => {
 let selectNodeOption = d3
   .select('#select-node')
   .selectAll('option')
+
+const updateSpans = () => {
+  if (!data.nodes.length) return
+  const { computed_score, computed_confidence } = data.nodes[0]
+
+  trustworthinessSpan.text(round(computed_score * 100))
+  confidenceSpan.text(round(computed_confidence * 100))
+}
 
 const loadNewData = async (newNodes, newLinks) => {
   data.nodes = newNodes.map((newNode, i) => {
