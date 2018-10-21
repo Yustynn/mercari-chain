@@ -71,6 +71,7 @@ class ReputationGraph():
 
     def update(self):
         '''Recomputes graph weights'''
+        self.graph=nx.Graph()
         user_ids, scores, confidences = self.read_users()
         for i in range(len(user_ids)):
             user_id = user_ids[i]
