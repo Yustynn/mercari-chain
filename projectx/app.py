@@ -95,6 +95,7 @@ def clear_database():
     conn.execute("DELETE FROM FRIENDS")
     conn.execute("DELETE FROM CHATS")
     conn.commit()
+    graph.update()
     return json.dumps({})
 
 def _get_nodelist():
