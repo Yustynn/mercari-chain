@@ -160,7 +160,7 @@ const handlePostReviews = async (e) => {
 
   if (ratingIndex === -1) return console.error("Rating not selected!")
 
-  const rating = ratingIndex + 1
+  const rating = (ratingIndex + 1) / 5
   
   let target = $('#select-node').value
   if (target == 'Bella Schmitz' ) target = 0;
