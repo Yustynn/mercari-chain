@@ -8,7 +8,8 @@ const CONFIG = {
     confidence: 0.39,
     trustworthiness: 0.12,
     strokeWidth: 5,
-  }
+  },
+  url: 'http://b4dbbdbb.ngrok.io'
 }
 
 const { random, round, floor, max } = Math;
@@ -37,20 +38,47 @@ const initNodes = () => {
   nodes[0].confidence = 0.8
 }
 
-const addLinks = (node) => {
-  for (let otherNode of data.nodes) {
-    const [id1, id2] = [node, otherNode].map(n => n.id)
-    if (id1 === id2) continue;
-    if (random() <= CONFIG.p) {
-      data.links.push({
-        source: id1,
-        target: id2,
-      });
+//const addLinks = (node) => {
+  //for (let otherNode of data.nodes) {
+    //const [id1, id2] = [node, otherNode].map(n => n.id)
+    //if (id1 === id2) continue;
+    //if (random() <= CONFIG.p) {
+      //data.links.push({
+        //source: id1,
+        //target: id2,
+      //});
+    //}
+  //}
+//}
+
+
+//const initLinks = () => data.nodes.forEach(addLinks)
+const loadNewData = async (newNodes, newLinks) => {
+  data.nodes = newNodes.map((newNode, i) => {
+    if (i >= data.nodes.length) {
+      return newNode
     }
-  }
+    return {
+      ...data.nodes[i],
+      ...newNode
+    }
+  })
+
+  data.links = newLinks.map((newLink, i) => {
+    if (i >= data.links.length) {
+      return newLink
+    }
+    return {
+      ...data.links[i],
+      ...newLink
+    }
+  })
+
+  console.log(data)
 }
 
-const initLinks = () => data.nodes.forEach(addLinks)
+//initNodes()
+//initLinks()
 
-initNodes()
-initLinks()
+
+

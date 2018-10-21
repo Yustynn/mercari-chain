@@ -15,8 +15,6 @@ const updateSpans = () => {
   confidenceSpan.text(round(confidence * 100))
 }
 
-updateSpans()
-
 const sim = d3.forceSimulation()
   .nodes(data.nodes);
 
@@ -96,10 +94,7 @@ const linkForce = d3
 
 sim.force('links', linkForce)
 
-const addNodeToViz = () => {
-  addNode()
-  addLinks(data.nodes[data.nodes.length-1])
-
+const refresh = () => {
   sim.nodes(data.nodes)
 
     // Apply the general update pattern to the nodes.
@@ -139,4 +134,32 @@ const addNodeToViz = () => {
 
 }
 
-d3.select('#add-person').on('click', addNodeToViz)
+const initData = async () => {
+  const newNodes = await (await fetch(
+    `${CONFIG.url}/get/nodelist`
+  )).json()
+  const newLinks = await (await fetch(
+    `${CONFIG.url}/get/edgelist`
+  )).json()
+
+  await loadNewData(newNodes, newLinks)
+  refresh()
+}
+
+const handleAddNewNode = async () => {
+  const res = await (await fetch(
+    'http://8812d06f.ngrok.io/user',
+    `${CONFIG.url}/user`,
+    { method: 'POST' }
+  )).json()
+
+  const { nodes, links } = res
+
+  loadNewData(nodes, links)
+  refresh()
+
+
+}
+
+initData()
+d3.select('#add-person').on('click', handleAddNewNode)
