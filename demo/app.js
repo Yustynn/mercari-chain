@@ -8,14 +8,6 @@ const height = +svg.attr('height');
 const [trustworthinessSpan, confidenceSpan] = ['#trustworthiness', '#confidence']
   .map(id => d3.select(id))
 
-const updateSpans = () => {
-  if (!data.nodes.length) return
-  const { confidence, trustworthiness } = data.nodes[0]
-
-  trustworthinessSpan.text(round(trustworthiness * 100))
-  confidenceSpan.text(round(confidence * 100))
-}
-
 const sim = d3.forceSimulation()
   .nodes(data.nodes);
 
