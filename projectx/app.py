@@ -83,6 +83,11 @@ def get_nodelist():
 def get_edgelist():
     return json.dumps(_get_edgelist())
 
+@app.route('/get/reviewlist/<int:user_id>')
+def get_reviewlist(user_id):
+    reviewlist = conn.execute("SELECT Rating FROM REVIEWS WHERE UserId=?",(user_id,)).fetchall()
+    return json.dumps(reviewlist)
+
 def _get_nodelist():
     nodelist = graph.get_nodes()
     return nodelist
