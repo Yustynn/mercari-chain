@@ -9,6 +9,7 @@ const [trustworthinessSpan, confidenceSpan] = ['#trustworthiness', '#confidence'
   .map(id => d3.select(id))
 
 const updateSpans = () => {
+  if (!data.nodes.length) return
   const { confidence, trustworthiness } = data.nodes[0]
 
   trustworthinessSpan.text(round(trustworthiness * 100))
@@ -19,8 +20,7 @@ const sim = d3.forceSimulation()
   .nodes(data.nodes);
 
 const getNodeFill = (node) => {
-  //if (node.id === 0) return 'white';
-  return d3.interpolateRdYlGn(node.trustworthiness)
+  return d3.interpolateRdYlGn(node.computed_score)
 }
 
 const getNodeStrokeWidth = (node) => {
@@ -29,12 +29,12 @@ const getNodeStrokeWidth = (node) => {
 }
 
 const getNodeRadius = (node) => max(
-  node.confidence * CONFIG.nodeSize,
+  node.computed_confidence * CONFIG.nodeSize,
   CONFIG.minRadius
 )
 
 const getNodeLabel = ({id}) => {
-  if (id === 0) return "Wim Schmitz"
+  if (id === 0) return "Bella Schmitz"
   return id
 }
 
@@ -102,11 +102,11 @@ const refresh = () => {
   node.exit().remove();
   node = node
     .enter().append("circle")
-      .attr("fill", getNodeFill)
       .attr("stroke", 'black')
       .attr('stroke-width', getNodeStrokeWidth)
+      .merge(node)
+      .attr("fill", getNodeFill)
       .attr('r', getNodeRadius)
-      .merge(node);
 
   // update labels
   label = label.data(data.nodes, d => d.id)
@@ -147,19 +147,55 @@ const initData = async () => {
 }
 
 const handleAddNewNode = async () => {
-  const res = await (await fetch(
-    'http://8812d06f.ngrok.io/user',
+  const res = (await fetch(
     `${CONFIG.url}/user`,
     { method: 'POST' }
   )).json()
 
-  const { nodes, links } = res
+  const { nodes, links } = await res
 
   loadNewData(nodes, links)
   refresh()
-
-
 }
 
 initData()
+
+const handlePostReviews = async (e) => {
+  const $ = document.querySelector.bind(document)
+  const ratingIndex = [1, 2, 3, 4, 5].map(n => {
+    return $(`#first-rate${n}`).checked
+  }).indexOf(true)
+
+  if (ratingIndex === -1) return console.error("Rating not selected!")
+
+  const rating = ratingIndex + 1
+  
+  let target = $('#select-node').value
+  if (target == 'Bella Schmitz' ) target = 0;
+
+  const count = +$('#numReviewsRange').value
+  const content = $('#review-text').value
+  const company = 'mercari'
+
+  const postData = { count, content, company, rating }
+  const formData = new FormData()
+  for (let key in postData) formData.append(key, postData[key])
+
+  console.log('posting', postData)
+
+  const res = (await fetch(
+    `${CONFIG.url}/add_review/${target}`, {
+      method: 'POST',
+      body: formData
+    }
+  )).json()
+
+  const { nodes, links } = await res
+  console.log(nodes, links)
+  loadNewData(nodes, links)
+  refresh()
+}
+
 d3.select('#add-person').on('click', handleAddNewNode)
+d3.select('#submit-reviews').on('click', handlePostReviews)
+

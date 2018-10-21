@@ -30,6 +30,8 @@
 		  <div class="column">
 		    <p class="is-uppercase has-text-weight-semibold has-text-right">No. of reviews:</p>
 		    <p class="is-uppercase has-text-weight-semibold has-text-right">Average rating:</p>
+
+
 		  </div>
 		  <div class="column">
 		    <p class="has-text-left">12</p>
@@ -42,11 +44,11 @@
 	  <!-- score -->
 	  <div class="column card has-background-white-bis has-text-centered">
 	    <div class="card-content">
-        <p class="is-size-1"><span id='trustworthiness'></span>%</p>
+        <p class="is-size-1"><span id='trustworthiness'>?</span>%</p>
 	      <p class="heading is-uppercase has-text-weight-bold">Trustworthiness</p>
 	    </div>
 	    <footer class="card-footer">
-        <p class="card-footer-item heading is-uppercase has-text-weight-light has-text-centered"> <span id='confidence'></span>% confidence</p>
+        <p class="card-footer-item heading is-uppercase has-text-weight-light has-text-centered"> <span id='confidence'>?</span>% confidence</p>
 	    </footer>
 	  </div>
 	</div>
@@ -62,17 +64,24 @@
 	    <div class="card">
 	      <div class="card-content box has-text-centered">
 		<!-- add person -->
-		<button class="button is-primary is-size-5" id="add-person">Add person</button>
+		<button class="button is-primary is-size-5" id="add-person">Add Person</button>
 	      </div>
 	      <div class="card-content box has-text-centered" style="border-top: 1px solid #dbdbdb;">
 		
 		<!-- review -->
+    <div class="select">
+      <select id='select-node'>
+      </select>
+    </div>
+    <div>
+      <p>Select a person</p>
+    </div>
 		<div class="slidecontainer">
-		  <input type="range" min="1" max="100" value="50" class="slider" id="numReviewsRange" style="width: 100%;" >
+		  <input type="range" min="1" max="100" value="50" class="slider" name="count" id="numReviewsRange" style="width: 100%;" >
 		  <p>No. of reviews: <span id="demo"></span></p>
 		</div>
 		<div class="control" style="margin: 3px 0 8px 0;">
-		  <textarea class="textarea is-hovered" placeholder="Write your review"></textarea>
+		  <textarea id='review-text' name='content' class="textarea is-hovered" placeholder="Write your review"></textarea>
 		</div>
 
 		<div style="display: flex; justify-content: center;">
@@ -91,7 +100,8 @@
 		    <label for="first-rate5" title="Amazing">5 stars</label>
 		  </fieldset>
 	      </div>
-	      <button class="button is-primary is-size-5">Add review</button>
+	      <button class="button is-primary is-size-5" id='submit-reviews' type='button'>Add Reviews</button>
+
 	      </div>
 	    </div>
 	  </div>

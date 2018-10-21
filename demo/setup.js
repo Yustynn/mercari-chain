@@ -53,6 +53,10 @@ const initNodes = () => {
 
 
 //const initLinks = () => data.nodes.forEach(addLinks)
+let selectNodeOption = d3
+  .select('#select-node')
+  .selectAll('option')
+
 const loadNewData = async (newNodes, newLinks) => {
   data.nodes = newNodes.map((newNode, i) => {
     if (i >= data.nodes.length) {
@@ -75,6 +79,15 @@ const loadNewData = async (newNodes, newLinks) => {
   })
 
   console.log(data)
+  updateSpans()
+
+  selectNodeOption = selectNodeOption.data(data.nodes, d => d.id);
+  selectNodeOption.exit().remove();
+  selectNodeOption = selectNodeOption
+    .data(data.nodes)
+    .enter().append('option')
+      .text(getNodeLabel)
+      .merge(selectNodeOption)
 }
 
 //initNodes()
