@@ -88,6 +88,15 @@ def get_reviewlist(user_id):
     reviewlist = conn.execute("SELECT Rating FROM REVIEWS WHERE UserId=?",(user_id,)).fetchall()
     return json.dumps(reviewlist)
 
+@app.route('/clear_database', methods=['DELETE'])
+def clear_database():
+    conn.execute("DELETE FROM REVIEWS")
+    conn.execute("DELETE FROM USERS")
+    conn.execute("DELETE FROM FRIENDS")
+    conn.execute("DELETE FROM CHATS")
+    conn.commit()
+    return json.dumps({})
+
 def _get_nodelist():
     nodelist = graph.get_nodes()
     return nodelist
